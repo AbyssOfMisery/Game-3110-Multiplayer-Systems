@@ -31,6 +31,16 @@ namespace Cube
                 );
 
         }
+
+        public void ChangePosition(float x, float y, float z)
+        {
+            this.gameObject.GetComponent<Transform>().position =
+                  new Vector3(
+                      Random.Range(0.0f, 1.0f),
+                      Random.Range(0.0f, 1.0f),
+                      Random.Range(0.0f, 1.0f)
+                  );
+        }
     }
 }
 

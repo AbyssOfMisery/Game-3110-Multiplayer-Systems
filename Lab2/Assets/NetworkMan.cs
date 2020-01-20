@@ -16,6 +16,17 @@ public class NetworkMan : MonoBehaviour
 
     private GameObject Cube;
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        Cube = Resources.Load("Cube", typeof(GameObject)) as GameObject;
+        udp = new UdpClient(HostName, port);
+        Byte[] sendBytes = Encoding.ASCII.GetBytes("connect");
+        udp.Send(sendBytes, sendBytes.Length);
+        udp.BeginReceive(new AsyncCallback(OnReceived), udp);
+        InvokeRepeating("HeartBeat", 1, 1);
+    }
+
     void OnDestroy(){
         udp.Dispose();
     }
@@ -23,7 +34,7 @@ public class NetworkMan : MonoBehaviour
     public enum commands{
         NEW_CLIENT,
         UPDATE,
-        OTHER,// must add other because server.py line 44
+        SPAWN,// must add SPAWN because server.py line 44
         DELETE
     };
     
@@ -43,12 +54,21 @@ public class NetworkMan : MonoBehaviour
         public float GREEN;
         public float BLUE;
     }
-    
+
+    [Serializable]
+    public class receivedPosition
+    {
+        public float X;
+        public float Y;
+        public float Z;
+    }
+
     [Serializable]
     public class Player{
         public string id;
-        public receivedColor color;     
-        
+        public receivedColor color;
+        public receivedPosition position;
+
     }
 
     public Dictionary<string, GameObject> networkedPlayers = new Dictionary<string, GameObject>();
@@ -63,16 +83,7 @@ public class NetworkMan : MonoBehaviour
     
     public object NetworkServer { get; private set; }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Cube = Resources.Load("Cube", typeof(GameObject)) as GameObject;
-        udp = new UdpClient(HostName, port);
-        Byte[] sendBytes = Encoding.ASCII.GetBytes("connect");
-        udp.Send(sendBytes, sendBytes.Length);
-        udp.BeginReceive(new AsyncCallback(OnReceived), udp);
-        InvokeRepeating("HeartBeat", 1, 1);
-    }
+   
 
     void OnReceived(IAsyncResult result){
         // this is what had been passed into BeginReceive as the second parameter:
@@ -103,7 +114,7 @@ public class NetworkMan : MonoBehaviour
                     deleteMessages.Enqueue(latestMessage);
                     Debug.Log("delete old infos");
                     break;
-                case commands.OTHER:
+                case commands.SPAWN:
                     spawnMessages.Enqueue(latestMessage);
                     Debug.Log("player connected");
                     break;
@@ -130,10 +141,12 @@ public class NetworkMan : MonoBehaviour
             for(int i = 0; i < spawnMessage.players.Length; i++){
                 GameObject newCube = Instantiate(
                     Cube,
-                    new Vector3(Random.Range(-2f,2f), Random.Range(-1f, 1f), Random.Range(-2f, 2f)), 
+                   new Vector3(Random.Range(-2f,2f),0, Random.Range(-2f, 2f)),
                     Quaternion.Euler(0, 0, 0)) as GameObject;
                 newCube.GetComponent<NetworkCube>()
-                    .ChangeColor(spawnMessage.players[i].color.RED, spawnMessage.players[i].color.GREEN, spawnMessage.players[i].color.BLUE);
+                    .ChangePosition(spawnMessage.players[i].position.X, spawnMessage.players[i].position.Y, spawnMessage.players[i].position.Z);
+                newCube.GetComponent<NetworkCube>()
+                   .ChangeColor(spawnMessage.players[i].color.RED, spawnMessage.players[i].color.GREEN, spawnMessage.players[i].color.BLUE);
                 networkedPlayers.Add(spawnMessage.players[i].id, newCube);
                
             }
@@ -146,6 +159,8 @@ public class NetworkMan : MonoBehaviour
             for(int i = 0; i < updateMessage.players.Length; i++){
                 var cubeId = updateMessage.players[i].id;
                 if(networkedPlayers.ContainsKey(cubeId)){
+                    networkedPlayers[cubeId].GetComponent<NetworkCube>()
+                   .ChangePosition(updateMessage.players[i].position.X, updateMessage.players[i].position.Y, updateMessage.players[i].position.Z);
                     networkedPlayers[cubeId].GetComponent<NetworkCube>()
                     .ChangeColor(updateMessage.players[i].color.RED, updateMessage.players[i].color.GREEN, updateMessage.players[i].color.BLUE);
                 }
