@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using System.Net.Sockets;
 using System.Net;
+using Cube;
 using Random = UnityEngine.Random;
 
 public class NetworkMan : MonoBehaviour
@@ -14,16 +15,6 @@ public class NetworkMan : MonoBehaviour
     public int port;
 
     private GameObject Cube;
-    // Start is called before the first frame update
-    void Start()
-    {
-        Cube = Resources.Load("Cube", typeof(GameObject)) as GameObject;
-        udp = new UdpClient(HostName, port);
-        Byte[] sendBytes = Encoding.ASCII.GetBytes("connect");
-        udp.Send(sendBytes, sendBytes.Length);
-        udp.BeginReceive(new AsyncCallback(OnReceived), udp);
-        InvokeRepeating("HeartBeat", 1, 1);
-    }
 
     void OnDestroy(){
         udp.Dispose();
@@ -48,15 +39,16 @@ public class NetworkMan : MonoBehaviour
 
     [Serializable]
     public class receivedColor{
-        public float R;
-        public float G;
-        public float B;
+        public float RED;
+        public float GREEN;
+        public float BLUE;
     }
     
     [Serializable]
     public class Player{
         public string id;
-        public receivedColor color;        
+        public receivedColor color;     
+        
     }
 
     public Dictionary<string, GameObject> networkedPlayers = new Dictionary<string, GameObject>();
@@ -68,8 +60,19 @@ public class NetworkMan : MonoBehaviour
 
     public Message latestMessage;
     public GameState lastestGameState;
-
+    
     public object NetworkServer { get; private set; }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        Cube = Resources.Load("Cube", typeof(GameObject)) as GameObject;
+        udp = new UdpClient(HostName, port);
+        Byte[] sendBytes = Encoding.ASCII.GetBytes("connect");
+        udp.Send(sendBytes, sendBytes.Length);
+        udp.BeginReceive(new AsyncCallback(OnReceived), udp);
+        InvokeRepeating("HeartBeat", 1, 1);
+    }
 
     void OnReceived(IAsyncResult result){
         // this is what had been passed into BeginReceive as the second parameter:
@@ -82,8 +85,7 @@ public class NetworkMan : MonoBehaviour
         byte[] message = socket.EndReceive(result, ref source);
         
         // do what you'd like with `message` here:
-        string returnData = Encoding.ASCII.GetString(message);
-        Debug.Log("***********************************");        
+        string returnData = Encoding.ASCII.GetString(message);    
         Debug.Log(returnData);        
         latestMessage = JsonUtility.FromJson<Message>(returnData);
 
@@ -131,7 +133,7 @@ public class NetworkMan : MonoBehaviour
                     new Vector3(Random.Range(-2f,2f), Random.Range(-1f, 1f), Random.Range(-2f, 2f)), 
                     Quaternion.Euler(0, 0, 0)) as GameObject;
                 newCube.GetComponent<NetworkCube>()
-                    .ChangeColor(spawnMessage.players[i].color.R, spawnMessage.players[i].color.G, spawnMessage.players[i].color.B);
+                    .ChangeColor(spawnMessage.players[i].color.RED, spawnMessage.players[i].color.GREEN, spawnMessage.players[i].color.BLUE);
                 networkedPlayers.Add(spawnMessage.players[i].id, newCube);
                
             }
@@ -145,8 +147,9 @@ public class NetworkMan : MonoBehaviour
                 var cubeId = updateMessage.players[i].id;
                 if(networkedPlayers.ContainsKey(cubeId)){
                     networkedPlayers[cubeId].GetComponent<NetworkCube>()
-                    .ChangeColor(updateMessage.players[i].color.R, updateMessage.players[i].color.G, updateMessage.players[i].color.B);
+                    .ChangeColor(updateMessage.players[i].color.RED, updateMessage.players[i].color.GREEN, updateMessage.players[i].color.BLUE);
                 }
+                
             }
         }
     }
@@ -159,7 +162,9 @@ public class NetworkMan : MonoBehaviour
                 if(networkedPlayers.ContainsKey(cubeId)){
                     Destroy(networkedPlayers[cubeId]);
                     networkedPlayers.Remove(cubeId);
+                   
                 }
+
             }
         }
 
