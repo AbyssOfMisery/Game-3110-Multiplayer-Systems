@@ -95,9 +95,11 @@ public class NetworkMan : MonoBehaviour
                     break;
                 case commands.UPDATE:
                     updateMessages.Enqueue(latestMessage);
+                    Debug.Log("player info update");
                     break;
                 case commands.DELETE:
                     deleteMessages.Enqueue(latestMessage);
+                    Debug.Log("delete old infos");
                     break;
                 case commands.OTHER:
                     spawnMessages.Enqueue(latestMessage);
@@ -126,7 +128,7 @@ public class NetworkMan : MonoBehaviour
             for(int i = 0; i < spawnMessage.players.Length; i++){
                 GameObject newCube = Instantiate(
                     Cube,
-                    new Vector3(Random.Range(-5f,5f), 0, Random.Range(-5f, 5f)), 
+                    new Vector3(Random.Range(-2f,2f), Random.Range(-1f, 1f), Random.Range(-2f, 2f)), 
                     Quaternion.Euler(0, 0, 0)) as GameObject;
                 newCube.GetComponent<NetworkCube>()
                     .ChangeColor(spawnMessage.players[i].color.R, spawnMessage.players[i].color.G, spawnMessage.players[i].color.B);
