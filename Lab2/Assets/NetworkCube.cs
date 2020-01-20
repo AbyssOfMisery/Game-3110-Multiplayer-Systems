@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class NetworkCube : MonoBehaviour
 {
-    public float angularSpeed = 200;
     public string id = string.Empty;
     // Start is called before the first frame update
     void Start()
@@ -19,8 +18,7 @@ public class NetworkCube : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var angle = angularSpeed * Time.deltaTime;
-        this.transform.Rotate(0,angle,0);
+     
     }
 
     // Changes Color Every Second - on server Update message
