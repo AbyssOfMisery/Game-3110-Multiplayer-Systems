@@ -195,7 +195,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 7.730133}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -256,16 +256,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ad586668d834644b8076c3e4f8466f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HostName: 3.15.37.98
+  HostName: 54.159.151.71
   port: 12345
   latestMessage:
     cmd: 1
     players:
     - id: 1
       color:
-        R: 222
-        G: 222
-        B: 222
+        RED: 0
+        GREEN: 0
+        BLUE: 0
+      position:
+        X: 0
+        Y: 0
+        Z: 0
   lastestGameState:
     players: []
 --- !u!1 &963194225

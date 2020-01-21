@@ -19,6 +19,7 @@ namespace Cube
             id = _id;
         }
 
+
         // Changes Color Every Second - on server Update message
         public void ChangeColor(float r, float g, float b)
         {
