@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 7132607633048115930}
   - component: {fileID: 7132607633048115929}
   - component: {fileID: 5296506739989955770}
+  - component: {fileID: 3610546896196294492}
   m_Layer: 0
-  m_Name: MyRotatingCube
+  m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,5 +107,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a47efd8650e0c1a4dbf467fd8da5852e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angularSpeed: 300
-  id: 
+--- !u!114 &3610546896196294492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7132607633048115928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e415a880347f7824ca14a9c849e13aad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  netMan: {fileID: 0}

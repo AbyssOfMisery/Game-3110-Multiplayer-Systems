@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Net;
+using System.Text;
 
 namespace Cube
 {
@@ -33,15 +35,8 @@ namespace Cube
 
         }
 
-        public void ChangePosition(float x, float y, float z)
-        {
-            this.gameObject.GetComponent<Transform>().position =
-                  new Vector3(
-                      Random.Range(0.0f, 1.0f),
-                      Random.Range(0.0f, 1.0f),
-                      Random.Range(0.0f, 1.0f)
-                  );
-        }
+
+       
     }
 }
 

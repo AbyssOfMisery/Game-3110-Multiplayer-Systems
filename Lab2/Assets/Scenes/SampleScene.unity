@@ -256,22 +256,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ad586668d834644b8076c3e4f8466f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HostName: 54.159.151.71
+  HostName: 34.204.5.179
   port: 12345
-  latestMessage:
-    cmd: 1
-    players:
-    - id: 1
-      color:
-        RED: 0
-        GREEN: 0
-        BLUE: 0
-      position:
-        X: 0
-        Y: 0
-        Z: 0
+  playerGO: {fileID: 0}
+  pktID: 0
   lastestGameState:
     players: []
+  latestNetMessage:
+    pktID: 0
+    pktType: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
