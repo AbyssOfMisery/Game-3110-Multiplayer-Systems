@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using System.Net.Sockets;
 using System.Net;
+using Cube;
 
 public class NetworkMan : MonoBehaviour
 {
@@ -218,14 +219,14 @@ public class NetworkMan : MonoBehaviour
         }
     }
 
-    float mainX = 0;
-    float mainY = 0;
+    float PositionX = 0;
+    float PositionY = 0;
     void RecordPosition()
     {
         if (!string.IsNullOrWhiteSpace(mainId))
         {
-            mainX = networkedPlayers[mainId].transform.position.x;
-            mainY = networkedPlayers[mainId].transform.position.y;
+            PositionX = networkedPlayers[mainId].transform.position.x;
+            PositionY = networkedPlayers[mainId].transform.position.y;
         }
     }
 
@@ -258,7 +259,7 @@ public class NetworkMan : MonoBehaviour
     {
         if (!string.IsNullOrWhiteSpace(mainId))
         {
-            string positionMessage = "{\"op\":\"cube_position\", \"position\":{\"x\":" + mainX + ", \"y\":" + mainY + ",\"z\":0}}";
+            string positionMessage = "{\"op\":\"cube_position\", \"position\":{\"x\":" + PositionY + ", \"y\":" + PositionX + ",\"z\":0}}";
             Debug.Log("Sending Position Message: " + positionMessage);
             Byte[] sendBytes = Encoding.ASCII.GetBytes(positionMessage);
             udp.Send(sendBytes, sendBytes.Length);
