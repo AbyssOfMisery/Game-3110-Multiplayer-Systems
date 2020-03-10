@@ -16,7 +16,6 @@ public class NetworkMan : MonoBehaviour
     private string mainId = string.Empty;
 
     private GameObject Cube;
-    private float xStep = 1.5f;
 
     public string host;
     public int port;
