@@ -220,12 +220,14 @@ public class NetworkMan : MonoBehaviour
 
     float PositionX = 0;
     float PositionY = 0;
+    float PositionZ = 0;
     void RecordPosition()
     {
         if (!string.IsNullOrWhiteSpace(mainId))
         {
             PositionX = networkedPlayers[mainId].transform.position.x;
             PositionY = networkedPlayers[mainId].transform.position.y;
+            PositionZ = networkedPlayers[mainId].transform.position.z;
         }
     }
 
@@ -258,7 +260,7 @@ public class NetworkMan : MonoBehaviour
     {
         if (!string.IsNullOrWhiteSpace(mainId))
         {
-            string positionMessage = "{\"op\":\"cube_position\", \"position\":{\"x\":" + PositionY + ", \"y\":" + PositionX + ",\"z\":0}}";
+            string positionMessage = "{\"op\":\"cube_position\", \"position\":{\"x\":" + PositionX + ", \"y\":" + PositionY + ",\"z\":" + PositionZ +"}}";
             Debug.Log("Sending Position Message: " + positionMessage);
             Byte[] sendBytes = Encoding.ASCII.GetBytes(positionMessage);
             udp.Send(sendBytes, sendBytes.Length);
